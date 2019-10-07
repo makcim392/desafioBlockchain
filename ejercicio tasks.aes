@@ -1,0 +1,38 @@
+// interface helper for todo list workshop
+// sophia docs: https://github.com/aeternity/protocol/blob/aeternity-node-v4.2.0/contracts/sophia.md
+contract ToDoList = 
+
+  // TODO: define contents of state as record state = { } to hold tasks.
+  //The smart contract should be able to store several tasks and those tasks should be indexed
+  //Each task should contain a variable "name" and a variable "completed" which can only be true or false
+  record state = {tasks : map(string, bool) }
+
+  // TODO: initialize state with empty data
+  entrypoint init() : state =
+    { tasks = {} }
+  
+  // TODO: The entrypoint "add_task" is accepting a new task name,
+  // define a new task and store it to the state,
+  // Hint: put(state{}) allows you to mutate state
+  stateful entrypoint add_task(task_name : string) =
+    put(state{  tasks[task_name] = false })
+    
+  // TODO: set existing task of state to completed
+  stateful entrypoint set_task_completed(seq_id : int) =
+    switch(Map.lookup(seq_id, state.tasks))
+      none => Call.value
+      Some(seq_id) => seq_id + Call.value
+    put(state{  tasks[seq_id] = true })
+
+    //esta última linea dice error, intenté de varias maneras. No logro matchear el string en el lugar correspondiente
+    /* 
+    Error: Http request for https://compiler.aepps.com/aci failed with status code 403. Status: . 
+    Error data: {"reason":"Type errors\nCannot unify string\n and int\nwhen checking the assignment 
+    of the field\n tasks : map(string, bool) (at line 25, column 31)\nto the old value __x and the 
+    new value\n __x {[seq_id] = true} : map(int, bool)\n\nCannot unify string\n and int\nwhen 
+    checking the record projection at line 22, column 36\n state.tasks : map(string, bool)\nagainst 
+    the expected type\n map(int, int)\n"}
+    */
+
+  // TODO: return all tasks of state in format {name: string, completed: bool}
+  //entrypoint get_tasks() : map(int, task) =
