@@ -1,0 +1,48 @@
+/*
+ejercicio crear un contrato para manejar una lista de compras
+
+cada item debe contener
+
+codigo (texto)
+nombre (texto)
+cantidad (int)
+precio (int)
+
+la lista de compras maneja una lista de items, una cantidad total y un total
+
+subirlo a github en un repositorio publico y agregar omar-saadoun como colaborador
+
+contract buyingList 
+*/
+
+contract listaCompras =
+
+    type item = {
+
+    codigo : String,
+    nombre : String,
+    cantidad : int,
+    precio : int
+}
+
+    record listaItems =  { 
+        items: list(item)
+    }
+
+    function largo(xs) =
+        switch(xs)
+        [] => 0
+        _  :: xs => largo(xs) + 1
+
+    function cantidadTotal(xs) : int
+        switch(xs)
+        [] => 0  
+        head.Cantidad::tail => head.Cantidad + cantidadTotal(tail)
+
+    function total(xs) : int
+        switch(xs)
+        [] => 0
+        head.precio::tail => head.precio + total(tail)
+
+    cantidadTotal(listaItems.items)
+    total(listaItems.items)
